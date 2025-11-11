@@ -1,3 +1,7 @@
+.venv
+*.csv
+.ipynb_checkpoints/
+.vscode/
 data/
 .venv
 .ipynb_checkpoints/
