@@ -150,15 +150,153 @@ class SolarDataEDA:
             plt.grid(True, alpha=0.3)
             plt.show()
 
-# Example Usage
+
+        def get_summary(self):
+            """Return key statistics for comparison"""
+            if self.df is not None:
+                return {
+                    'mean_GHI': self.df['GHI'].mean(),
+                    'median_GHI': self.df['GHI'].median(),
+                    'std_GHI': self.df['GHI'].std(),
+                    'max_GHI': self.df['GHI'].max()
+                }
+            return {}
+        
+
+        def generate_bubble_chart(self):
+            """Bubble Chart: GHI vs Tamb with RH bubble size"""
+            if all(col in self.df.columns for col in ['GHI', 'Tamb', 'RH']):
+                plt.figure(figsize=(10, 6))
+                plt.scatter(self.df['Tamb'], self.df['GHI'], 
+                        s=self.df['RH']/2, alpha=0.6, color='blue')
+                plt.xlabel('Temperature (°C)')
+                plt.ylabel('GHI (W/m²)')
+                plt.title('Bubble Chart: GHI vs Temperature (Bubble size = RH%)')
+                plt.grid(True, alpha=0.3)
+                plt.show()
+            else:
+                print("❌ Required columns (GHI, Tamb, RH) not available for bubble chart")
+
+    def generate_histograms(self):
+        """Generate Histograms for GHI and Wind Speed"""
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+        
+        # GHI Histogram
+        if 'GHI' in self.df.columns:
+            axes[0].hist(self.df['GHI'].dropna(), alpha=0.7, bins=30, color='orange')
+            axes[0].set_xlabel('GHI (W/m²)')
+            axes[0].set_ylabel('Frequency')
+            axes[0].set_title('GHI Distribution Histogram')
+            axes[0].grid(True, alpha=0.3)
+        
+        # Wind Speed Histogram
+        if 'WS' in self.df.columns:
+            axes[1].hist(self.df['WS'].dropna(), alpha=0.7, bins=30, color='green')
+            axes[1].set_xlabel('Wind Speed (m/s)')
+            axes[1].set_ylabel('Frequency')
+            axes[1].set_title('Wind Speed Distribution Histogram')
+            axes[1].grid(True, alpha=0.3)
+        
+        plt.tight_layout()
+        plt.show()
+
+    def generate_correlation_heatmap(self):
+        """Generate Correlation Heatmap"""
+        numeric_cols = self.df.select_dtypes(include=[np.number]).columns
+        key_cols = [col for col in ['GHI', 'DNI', 'DHI', 'Tamb', 'RH', 'WS', 'BP'] if col in numeric_cols]
+        
+        if len(key_cols) > 1:
+            plt.figure(figsize=(8, 6))
+            correlation_matrix = self.df[key_cols].corr()
+            sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', center=0,
+                    square=True, linewidths=0.5)
+            plt.title('Correlation Heatmap - Solar Measurements')
+            plt.tight_layout()
+            plt.show()
+        else:
+            print("❌ Not enough numeric columns for correlation heatmap")
+
+    def generate_scatter_plots(self):
+        """Generate multiple scatter plots"""
+        plots_created = 0
+        fig, axes = plt.subplots(2, 2, figsize=(15, 12))
+        
+        # WS vs GHI
+        if all(col in self.df.columns for col in ['WS', 'GHI']):
+            axes[0,0].scatter(self.df['WS'], self.df['GHI'], alpha=0.6, color='red')
+            axes[0,0].set_xlabel('Wind Speed (m/s)')
+            axes[0,0].set_ylabel('GHI (W/m²)')
+            axes[0,0].set_title('Wind Speed vs GHI')
+            axes[0,0].grid(True, alpha=0.3)
+            plots_created += 1
+        
+        # RH vs Tamb
+        if all(col in self.df.columns for col in ['RH', 'Tamb']):
+            axes[0,1].scatter(self.df['RH'], self.df['Tamb'], alpha=0.6, color='blue')
+            axes[0,1].set_xlabel('Relative Humidity (%)')
+            axes[0,1].set_ylabel('Temperature (°C)')
+            axes[0,1].set_title('Relative Humidity vs Temperature')
+            axes[0,1].grid(True, alpha=0.3)
+            plots_created += 1
+        
+        # RH vs GHI
+        if all(col in self.df.columns for col in ['RH', 'GHI']):
+            axes[1,0].scatter(self.df['RH'], self.df['GHI'], alpha=0.6, color='green')
+            axes[1,0].set_xlabel('Relative Humidity (%)')
+            axes[1,0].set_ylabel('GHI (W/m²)')
+            axes[1,0].set_title('Relative Humidity vs GHI')
+            axes[1,0].grid(True, alpha=0.3)
+            plots_created += 1
+        
+        # WD vs GHI
+        if all(col in self.df.columns for col in ['WD', 'GHI']):
+            axes[1,1].scatter(self.df['WD'], self.df['GHI'], alpha=0.6, color='purple')
+            axes[1,1].set_xlabel('Wind Direction (°)')
+            axes[1,1].set_ylabel('GHI (W/m²)')
+            axes[1,1].set_title('Wind Direction vs GHI')
+            axes[1,1].grid(True, alpha=0.3)
+            plots_created += 1
+        
+        if plots_created > 0:
+            plt.tight_layout()
+            plt.show()
+        else:
+            print("❌ No scatter plots could be created - missing required columns")
+
+    def generate_wind_analysis(self):
+        """Generate wind rose and wind analysis"""
+        if all(col in self.df.columns for col in ['WD', 'WS']):
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5), subplot_kw=dict(projection='polar'))
+            
+            # Wind Rose
+            theta = np.radians(self.df['WD'].dropna())
+            radii = self.df['WS'].dropna()
+            
+            ax1.scatter(theta, radii, alpha=0.6)
+            ax1.set_title('Wind Rose - Direction vs Speed')
+            
+            # Wind Speed distribution
+            wind_bins = np.linspace(0, self.df['WS'].max(), 12)
+            wind_dir_bins = np.linspace(0, 2*np.pi, 13)
+            
+            ax2.hist(theta, bins=wind_dir_bins, alpha=0.7)
+            ax2.set_title('Wind Direction Distribution')
+            
+            plt.tight_layout()
+            plt.show()
+        else:
+            print("❌ Wind direction/speed data not available for wind analysis")
+                
+
+    # Example Usage
 if __name__ == "__main__":
     # Initialize EDA
     eda = SolarDataEDA("data/benin.csv")
-    
+        
     # Load and clean data
     eda.load_data()
     eda.clean_data()
-    
+        
     # Perform analysis
     eda.solar_radiation_timeseries()
     eda.daily_solar_patterns()
@@ -166,8 +304,8 @@ if __name__ == "__main__":
     eda.distribution_analysis()
     eda.outlier_analysis()
     eda.cleaning_impact_analysis()
-    
-    # Export cleaned data
-    eda.export_cleaned_data() 
-
         
+# Export cleaned data
+eda.export_cleaned_data() 
+
+            
