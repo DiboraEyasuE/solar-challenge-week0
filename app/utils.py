@@ -2,14 +2,15 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 
+
 # ------------------------------
 # Load solar dataset
 # ------------------------------
 def load_data(country):
     file_map = {
-        "Benin": "benin-malanville-cleaned.csv",
-        "Sierra": "sierraleone-bumbuna.csv",
-        "Togo": "togo_cp-cleaned.csv"
+        "Benin": "benin_clean.csv",
+        "Sierra": "sierraleone_clean.csv",
+        "Togo": "togo_clean.csv"
     }
 
     base_path = os.path.join(os.path.dirname(__file__), "..", "data")
