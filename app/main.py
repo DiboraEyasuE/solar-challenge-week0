@@ -1,5 +1,5 @@
 import streamlit as st
-from app.utils import load_data, get_summary_stats, create_boxplot, top_regions_table
+from utils import load_data, get_summary_stats, create_boxplot, top_regions_table
 
 st.title("Solar Resource Dashboard")
 st.write("Visualize solar irradiance data interactively.")
