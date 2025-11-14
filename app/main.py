@@ -35,9 +35,21 @@ fig = create_boxplot(df, metric)
 st.pyplot(fig)
 
 # Top regions (if files contain region column)
-st.subheader("Top Regions (By Avg GHI)")
-table = top_regions_table(df)
-if isinstance(table, str):
-    st.info(table)
+st.subheader("Top GHI Rankings")
+
+if "region" not in df.columns:
+    st.info(
+        "Region-level analysis is unavailable because the dataset does not contain "
+        "a 'region' or 'location' field. "
+        "Showing alternative ranking: Top Months by Average GHI."
+    )
+    
+    df['month'] = df['Timestamp'].dt.month
+    ghi_by_month = df.groupby('month')['GHI'].mean()
+    st.bar_chart(ghi_by_month)
+
 else:
-    st.write(table)
+    # Region ranking plot
+    top_regions = df.groupby('region')['GHI'].mean().sort_values(ascending=False)
+    st.bar_chart(top_regions)
+
