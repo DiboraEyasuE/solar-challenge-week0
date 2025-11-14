@@ -3,7 +3,9 @@
 .ipynb_checkpoints/
 .vscode/
 data/
-.venv
-.ipynb_checkpoints/
-*.csv
 *.png
+__pycache__/
+*.pyc
+*.pyo
+.DS_Store
+
