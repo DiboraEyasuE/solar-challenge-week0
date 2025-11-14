@@ -11,7 +11,7 @@ The primary goal is to study how solar radiation, air temperature, relative humi
 ## Situational Overview
 
 As an analytics engineer at MoonLight Energy Solutions, a consultancy firm specializing in data-driven insights for the energy sector, the analysis aims to:
-  * Identify key events affecting Brent oil prices over the past decade.
+  * Identify key events affecting solar irradiance which is a key element for solar installation decade.
   * Measure the impact of these events on price changes.
   * Provide clear, data-driven insights to guide investment strategies and policy development
 
@@ -93,5 +93,39 @@ The dataset includes environmental variable records from August 9, 2021, to Augu
   ```
   pip list
   ```
+
+  # 🌞 Solar Resource Dashboard  
+A simple and interactive Streamlit dashboard for visualizing solar irradiance data (GHI).  
+This application demonstrates clean UI design, modular Python structure, and real-time data exploration.
+
+---
+
+## Key Features
+- **Interactive Country Selection** (Benin, Sierra Leone, Togo)
+- **Metric Selector** (GHI)
+- **Boxplot Visualization** using Matplotlib
+- **Summary Statistics**
+- **Top Regions Table** (if region column exists)
+- **Modular Folder Structure** using `app/` and `scripts/`
+- **Ready for Deployment** on Streamlit Community Cloud
+---
+
+---
+
+## Installation
+
+1. **Clone the repository**
+
+```bash
+git clone <your-repo-url>
+cd solar-challenge-week0
+```
+or
+### Run app locally
+streamlit run app/main.py
+
+## 📁 Project Structure
+
+
   ## Author
   Developed by Dibora EyasuE
