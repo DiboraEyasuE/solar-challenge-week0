@@ -1,32 +1,56 @@
 import pandas as pd
-import os 
+import os
+import matplotlib.pyplot as plt
 
-# Function to load a country's solar dataset
+# ------------------------------
+# Load solar dataset
+# ------------------------------
 def load_data(country):
-    """
-    load solar dataset for the selected country
-    The file names are:
-       -benin-malanville-cleaned.csv
-       -sierraleone-bumbuna.csv
-       -togo_cp-cleaned.csv
-    """
-    file_map={
-        "Benin":"benin-malanville-cleaned.csv",
-        " Sierra":"sierraleone-bumbuna.csv",
-        "Togo":"togo_cp-cleaned.csv"
+    file_map = {
+        "Benin": "benin-malanville-cleaned.csv",
+        "Sierra": "sierraleone-bumbuna.csv",
+        "Togo": "togo_cp-cleaned.csv"
     }
-    # get absolute path for data 
-    base_path=os.path.join(os.path.dirname(__file__),"..","data")
 
-    filename=os.path.join(base_path,file_map.get(country,""))
-    if os.path.exists(filename): # check the existance of the file
-        df=pd.read_csv(filename) 
-        # keep GHI only is it exists
-        if "GHI" in df.columns:
-            return df[["GHI"]].dropna()
-        else:
-            return pd.DataFrame({"Error":[f"File not found:{filename}"]})
+    base_path = os.path.join(os.path.dirname(__file__), "..", "data")
+    filename = os.path.join(base_path, file_map.get(country, ""))
+
+    if not os.path.exists(filename):
+        return pd.DataFrame({"Error": [f"File not found: {filename}"]})
+
+    df = pd.read_csv(filename)
+
+    if "GHI" not in df.columns:
+        return pd.DataFrame({"Error": ["GHI column not found"]})
+
+    return df.dropna(subset=["GHI"])
+
+
+# ------------------------------
+# Summary statistics
+# ------------------------------
 def get_summary_stats(df):
-    if "GHI" in df.columns:
-        return df["GHI"].describe()
-    return {"Error":"GHI column not found"}
+    return df["GHI"].describe()
+
+
+# ------------------------------
+# Boxplot 
+# ------------------------------
+def create_boxplot(df, metric):
+    fig, ax = plt.subplots()
+    ax.boxplot(df[metric], vert=True)
+    ax.set_title(f"{metric} Distribution")
+    ax.set_ylabel(metric)
+    return fig
+
+
+# ------------------------------
+# Top regions table (if available)
+# ------------------------------
+def top_regions_table(df):
+    if "region" not in df.columns:
+        return "No region column available in this dataset."
+
+    table = df.groupby("region")["GHI"].mean().sort_values(ascending=False).head(5)
+    return table.reset_index()
+
