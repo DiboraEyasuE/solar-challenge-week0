@@ -97,7 +97,6 @@ The dataset includes environmental variable records from August 9, 2021, to Augu
   # 🌞 Solar Resource Dashboard  
 A simple and interactive Streamlit dashboard for visualizing solar irradiance data (GHI).  
 This application demonstrates clean UI design, modular Python structure, and real-time data exploration.
-
 ---
 
 ## Key Features
@@ -108,8 +107,6 @@ This application demonstrates clean UI design, modular Python structure, and rea
 - **Top Regions Table** (if region column exists)
 - **Modular Folder Structure** using `app/` and `scripts/`
 - **Ready for Deployment** on Streamlit Community Cloud
----
-
 ---
 
 ## Installation
