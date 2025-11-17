@@ -53,11 +53,30 @@ class SolarDataEDA:
         return self.df
 
 
-    def export_cleaned_data(self, country_name="benin"):
-        """Export cleaned dataset to CSV"""
-        output_path = f'../data/{country_name}_clean.csv'
-        self.df.to_csv(output_path, index=False)
-        print(f"✅ Cleaned data exported to: {output_path}")
+def export_cleaned_data(self, country_name="benin"):
+    """Export cleaned dataset to CSV with validation"""
+    import os
+    
+    # Create data directory if it doesn't exist
+    os.makedirs('../data', exist_ok=True)
+    
+    # Generate output path
+    output_path = f'../data/{country_name}_clean.csv'
+    
+    # Export with explicit success message
+    self.df.to_csv(output_path, index=False)
+    
+    # Verify file was created
+    if os.path.exists(output_path):
+        file_size = os.path.getsize(output_path) / 1024  # Size in KB
+        print(f"✅ SUCCESS: Cleaned data exported to: {output_path}")
+        print(f"📁 File size: {file_size:.2f} KB")
+        print(f"📊 Rows exported: {len(self.df)}")
+        print(f"📈 Columns exported: {len(self.df.columns)}")
+    else:
+        print(f"❌ ERROR: Failed to export to {output_path}")
+    
+    return output_path
 
 
     def time_series_analysis(self):

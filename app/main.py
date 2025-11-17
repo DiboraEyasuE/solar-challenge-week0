@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 from utils import load_data, get_summary_stats, create_boxplot, top_regions_table
 
 st.title("Solar Resource Dashboard")
@@ -37,19 +38,25 @@ st.pyplot(fig)
 # Top regions (if files contain region column)
 st.subheader("Top GHI Rankings")
 
+# Convert timestamp to datetime
+if "Timestamp" in df.columns:
+    df['Timestamp'] = pd.to_datetime(df['Timestamp'], errors='coerce')
+
 if "region" not in df.columns:
     st.info(
         "Region-level analysis is unavailable because the dataset does not contain "
-        "a 'region' or 'location' field. "
-        "Showing alternative ranking: Top Months by Average GHI."
+        "a 'region' or 'location' field. Showing alternative ranking: Top Months by Average GHI."
     )
-    
-    df['month'] = df['Timestamp'].dt.month
-    ghi_by_month = df.groupby('month')['GHI'].mean()
-    st.bar_chart(ghi_by_month)
+
+    # Ensure Timestamp is valid
+    if df['Timestamp'].isna().all():
+        st.error("Timestamp column could not be parsed as datetime. Cannot compute monthly averages.")
+    else:
+        df['month'] = df['Timestamp'].dt.month
+        ghi_by_month = df.groupby('month')['GHI'].mean()
+        st.bar_chart(ghi_by_month)
 
 else:
-    # Region ranking plot
     top_regions = df.groupby('region')['GHI'].mean().sort_values(ascending=False)
     st.bar_chart(top_regions)
 
