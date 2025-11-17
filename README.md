@@ -11,8 +11,8 @@ The primary goal is to study how solar radiation, air temperature, relative humi
 ## Situational Overview
 
 As an analytics engineer at MoonLight Energy Solutions, a consultancy firm specializing in data-driven insights for the energy sector, the analysis aims to:
-  * Identify key events affecting solar irradiance which is a key element for solar installation decade.
-  * Measure the impact of these events on price changes.
+  * Identify key events affecting solar irradiance which is a key element for solar installation.
+  * Measure the impact of these environmental variables on the long and short term solar project i,plementation.
   * Provide clear, data-driven insights to guide investment strategies and policy development
 
 ## Data
@@ -39,11 +39,11 @@ The dataset includes environmental variable records from August 9, 2021, to Augu
 ## Learning Outcomes
 
 * Skills:
- * * Statistical data visualisation using matplotlib
- * * Understanding the meaning of zscore and outlier detection
+   * Statistical data visualisation using matplotlib
+   * Understanding the meaning of zscore and outlier detection
 * Knowledge:
- * * Probability distributions and their relevance
- * * Time series analysis techniques
+   * Probability distributions and their relevance
+   * Time series analysis techniques
 
 ## Project Tasks
 
@@ -62,8 +62,8 @@ The dataset includes environmental variable records from August 9, 2021, to Augu
  * Bubble chart
 ### Task 3: Cross-Country Comparison
  * Metric Comparison
-  * * Boxplots
-  * * Summary Testing
+    * Boxplots
+    * Summary Testing
  * Statistical Testing
  * Key observation
  * Visual Summary
@@ -117,15 +117,12 @@ This application demonstrates clean UI design, modular Python structure, and rea
 1. **Clone the repository**
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/DiboraEyasuE/solar-challenge-week0.git
 cd solar-challenge-week0
 ```
 or
 ### Run app locally
 streamlit run app/main.py
-
-## 📁 Project Structure
-
 
   ## Author
   Developed by Dibora EyasuE
